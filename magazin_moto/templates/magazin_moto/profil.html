@@ -1,0 +1,6 @@
+<h1>Profil: {{ user.username }}</h1>
+<p>Email: {{ user.email }}</p>
+<p>Oraș: {{ localitate_sess }}</p>
+<a href="{% url 'password_change' %}">Schimbă Parola</a>
+<br>
+<a href="{% url 'logout' %}">Delogare</a>

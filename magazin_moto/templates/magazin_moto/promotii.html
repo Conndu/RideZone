@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trimite Promoții</title>
+</head>
+<body style="padding: 20px; font-family: Arial;">
+
+    <h1>Generare Promoții & Oferte</h1>
+    <a href="{% url 'index' %}">Acasa</a>
+    <hr>
+
+    {% if mesaj_info %}
+        <h3 style="color: green;">{{ mesaj_info }}</h3>
+    {% endif %}
+
+    <div style="background: #f0f0f0; padding: 20px; max-width: 600px;">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" style="background: red; color: white; padding: 10px;">TRIMITE EMAILURI ÎN MASĂ</button>
+        </form>
+    </div>
+
+</body>
+</html>

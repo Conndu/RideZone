@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Oferta Motociclete</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; display: flex; flex-direction: column; align-items: center;}
+        .main-layout { display: flex; gap: 20px; max-width: 1000px; width: 100%; align-items: flex-start;}
+        
+        .sidebar { flex: 1; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .sidebar input, .sidebar select { width: 100%; padding: 8px; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;}
+        .sidebar label { font-weight: bold; font-size: 0.9em; color: #555; }
+        .error { color: red; font-size: 0.8em; }
+
+        .content { flex: 3; }
+        .produs-card { border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 5px; background: #fff; }
+        .badge { padding: 5px 10px; color: white; border-radius: 3px; font-size: 0.8em; text-decoration: none; display: inline-block;}
+        .price { font-size: 1.2em; color: #27ae60; font-weight: bold; }
+        
+        .menu { background: #333; padding: 10px; border-radius: 5px; color: white; margin-bottom: 20px; width: 100%; box-sizing: border-box;}
+        .menu a { color: #ddd; text-decoration: none; margin: 0 10px; font-weight: bold; }
+        
+        .btn-submit { background-color: #27ae60; color: white; border: none; cursor: pointer; font-weight: bold; }
+        .btn-reset { background-color: #e74c3c; color: white; border: none; cursor: pointer; text-decoration: none; padding: 8px; display: block; text-align: center; border-radius: 4px; margin-top: 5px;}
+        .warning-msg { background: #fff3cd; color: #856404; padding: 10px; border-radius: 5px; margin-bottom: 15px; border: 1px solid #ffeeba; }
+    </style>
+    
+    <script>
+        function confirmaReset(event) {
+            if (!confirm("Ești sigur că vrei să resetezi filtrele? Vei pierde selecțiile actuale.")) {
+                event.preventDefault();
+            }
+        }
+    </script>
+</head>
+<body>
+
+    <nav class="menu">
+        <a href="{% url 'index' %}">Acasă</a>
+        <span>| Categorii:</span>
+        <a href="{% url 'produse' %}">Toate</a>
+        {% for cat in categorii %}
+            | <a href="{% url 'categorie_view' nume_categorie=cat.nume %}">{{ cat.nume }}</a>
+        {% endfor %}
+    </nav>
+
+    <div class="main-layout">
+        
+        <div class="sidebar">
+            <h3>Filtrează</h3>
+            <form method="get">
+                {% if form.non_field_errors %}
+                    <div class="error">{{ form.non_field_errors }}</div>
+                {% endif %}
+
+                {% for field in form %}
+                    {% if not field.is_hidden %}
+                        <label>{{ field.label }}</label>
+                    {% endif %}
+                    
+                    {{ field }}
+                    
+                    {% if field.errors %}
+                        <div class="error">{{ field.errors }}</div>
+                    {% endif %}
+                {% endfor %}
+
+                <input type="hidden" name="sort" value="{{ current_sort }}">
+
+                <button type="submit" class="btn-submit">Aplică Filtre</button>
+                
+                <a href="{% url 'produse' %}" class="btn-reset" onclick="confirmaReset(event)">Resetează Filtre</a>
+            </form>
+        </div>
+
+        <div class="content">
+            <h1>
+                {% if categorie_curenta %}
+                    <span style="color: {{ categorie_curenta.culoare_identificare }}">●</span> 
+                    {{ categorie_curenta.nume }}
+                {% else %}
+                    Toate Motocicletele
+                {% endif %}
+            </h1>
+
+            {% if mesaj_paginare %}
+                <div class="warning-msg">{{ mesaj_paginare }}</div>
+            {% endif %}
+            
+            {% if not produse %}
+                <div class="warning-msg">Nu am găsit produse conform filtrelor tale. Încearcă alte valori!</div>
+            {% endif %}
+
+            <div style="margin-bottom: 15px;">
+                Sortare: 
+                <a href="?sort=a&{{ request.GET.urlencode }}">Ieftin</a> | 
+                <a href="?sort=d&{{ request.GET.urlencode }}">Scump</a>
+            </div>
+
+            {% for moto in produse %}
+                <div class="produs-card">
+                    <h3>
+                        <a href="{% url 'produs_detail' id_motocicleta=moto.id_motocicleta %}" style="color: #333;">
+                            {{ moto.marca.nume }} {{ moto.model }}
+                        </a>
+                    </h3>
+                    
+                    <p>
+                        <span class="price">{{ moto.pret }} EUR</span> | 
+                        An: {{ moto.an_fabricatie }}
+                    </p>
+                    
+                    <div style="margin-top: 10px;">
+                        <a href="{% url 'categorie_view' nume_categorie=moto.categorie.nume %}" 
+                           class="badge" 
+                           style="background-color: {{ moto.categorie.culoare_identificare }};">
+                           {{ moto.categorie.nume }}
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="pagination">
+                <span class="step-links">
+                    {% if produse.has_previous %}
+                        <a href="?page={{ produse.previous_page_number }}&{{ request.GET.urlencode|cut:'page=' }}">Înapoi</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Pagina {{ produse.number }} din {{ produse.paginator.num_pages }}
+                    </span>
+
+                    {% if produse.has_next %}
+                        <a href="?page={{ produse.next_page_number }}&{{ request.GET.urlencode|cut:'page=' }}">Înainte</a>
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

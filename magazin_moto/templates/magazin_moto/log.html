@@ -1,0 +1,92 @@
+{% load log_filters %} <!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <title>Log Accesări</title>
+    <style>
+        body { font-family: sans-serif; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ccc; padding: 8px; text-align: left; vertical-align: top;}
+        th { background-color: #f4f4f4; }
+        .error { color: red; font-weight: bold; }
+        .stats { margin-top: 20px; border-top: 2px solid #333; padding-top: 10px; }
+        nav { margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <h1>Log Accesări</h1>
+    <nav>
+        <a href="/">Home</a> |
+        <a href="/info">Info</a> |
+        <a href="/log">Log</a>
+    </nav>
+
+    {% if error_message %}
+        <p class="error">{{ error_message }}</p>
+    {% endif %}
+
+    {% if total_accesses is not None %}
+        <section>
+            <h3>Număr Total Accesări</h3>
+            <p>Numărul total de accesări (/, /info, /log) de la pornirea serverului: <strong>{{ total_accesses }}</strong></p>
+        </section>
+    {% endif %}
+
+    <hr>
+
+    <h2>Lista Accesări Solicitate</h2>
+
+    {% if not logs %}
+        <p>Nu există accesări de afișat conform filtrelor.</p>
+    {% else %}
+
+        {% if show_table %}
+            <table>
+                <thead>
+                    <tr>
+                        {% for header in table_headers %}
+                            <th>{{ header|capfirst }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                        <tr>
+                            {% for header in table_headers %}
+                                <td>{{ log|get_item:header }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+        {% elif show_details %}
+            <ul>
+                {% for log in logs %}
+                    <li>Data și ora: {{ log.timestamp }} (ID: {{ log.id }}, Path: {{ log.path }})</li>
+                {% endfor %}
+            </ul>
+
+        {% else %}
+            <ul>
+                {% for log in logs %}
+                    <li>ID: {{ log.id }} | Path: {{ log.path }} | Data: {{ log.timestamp }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+    {% endif %}
+
+
+    <section class="stats">
+        <h3>Statistici</h3>
+        {% if most_accessed %}
+            <p>Pagina cea mai accesată: <strong>{{ most_accessed }}</strong></p>
+            <p>Pagina cea mai puțin accesată: <strong>{{ least_accessed }}</strong></p>
+        {% else %}
+            <p>Nu există încă statistici (reîmprospătează pagina).</p>
+        {% endif %}
+    </section>
+
+</body>
+</html>

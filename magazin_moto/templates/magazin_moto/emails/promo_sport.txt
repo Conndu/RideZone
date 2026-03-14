@@ -1,0 +1,10 @@
+Salutare pasionatule de viteză!
+
+Avem o veste bună pentru tine. Pentru că te-ai uitat la modelele noastre Sport, ți-am pregătit o ofertă:
+Subiect: {{ subiect }}
+Cod Reducere: {{ cod_promo }}
+Discount: {{ discount }}%
+
+Oferta expiră la data de: {{ data_expirare }}
+
+Echipa RideZone

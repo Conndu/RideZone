@@ -1,0 +1,14 @@
+{
+    "nume": "Popescu",
+    "prenume": "",
+    "cnp": "",
+    "varsta_calculata": "22 ani \u0219i 3 luni",
+    "email": "mihneacondurat@gmail.com",
+    "tip_mesaj": "intrebare",
+    "subiect": "Intrebare",
+    "mesaj": "Salut, vreau mesaj. Vreau chiar acum. Popescu",
+    "zile_asteptare": 5,
+    "urgent": false,
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-01-14 22:37:10"
+}

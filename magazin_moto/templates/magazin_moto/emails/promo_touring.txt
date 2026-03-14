@@ -1,0 +1,10 @@
+Salutare călătorule!
+
+Dacă îți plac drumurile lungi, avem ceva pentru tine.
+Titlu Promoție: {{ subiect }}
+Folosește codul: {{ cod_promo }} pentru {{ discount }}% reducere.
+
+Grăbește-te! Oferta e valabilă până la: {{ data_expirare }}
+
+Drumuri bune,
+RideZone
