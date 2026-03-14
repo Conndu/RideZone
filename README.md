@@ -14,7 +14,7 @@ RideZone is a full-stack web application built with **Django**, designed for mot
 - **Database:** SQLite / PostgreSQL
 - **DevOps:** Git for version control
 
-## 🔧 Installation
+## Installation
 1. Clone the repository: `git clone https://github.com/Conndu/RideZone.git`
 2. Install requirements: `pip install -r requirements.txt`
 3. Run migrations: `python manage.py migrate`
